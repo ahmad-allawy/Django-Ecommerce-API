@@ -1,0 +1,50 @@
+services:
+  django-app:
+    build:
+      context: .
+      target: development
+    container_name: django-app-dev
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./project/.env
+    volumes:
+      - ./project:/app/project:cached
+      - ./project/requirements.txt:/app/requirements.txt:cached
+    command: >
+      sh -c "pip install --no-cache-dir -r /app/requirements.txt &&
+            python /app/project/manage.py collectstatic --noinput &&
+            gunicorn project.wsgi:application --bind 0.0.0.0:8000 --reload"
+
+
+    depends_on:
+      - db
+    restart: unless-stopped
+    environment:
+      - DJANGO_SETTINGS_MODULE=project.settings.dev
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db-dev
+    environment:
+      - POSTGRES_DB=django_db
+      - POSTGRES_USER=django_user
+      - POSTGRES_PASSWORD=django_password
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx-dev
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - django-app
+
+volumes:
+  postgres_data_dev:
