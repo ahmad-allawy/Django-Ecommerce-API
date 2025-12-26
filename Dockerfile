@@ -18,14 +18,13 @@ ENV PYTHONUNBUFFERED=1
 ENV DJANGO_SETTINGS_MODULE=project.settings.dev
 
 
-
+WORKDIR /app/project/
+RUN python manage.py collectstatic --noinput
 # ===============================
 # Development stage
 # ===============================
 FROM base AS development
 
-# Install development tools (optional)
-RUN pip install --no-cache-dir gunicorn
 
 # Default command for dev
 
@@ -37,9 +36,6 @@ CMD ["gunicorn", "project.wsgi:application", "--bind", "0.0.0.0:8000", "--reload
 # ===============================
 FROM base AS production
 
-
-# Install production server
-RUN pip install --no-cache-dir gunicorn
 
 # Expose port
 EXPOSE 8000
