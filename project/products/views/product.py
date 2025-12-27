@@ -26,7 +26,7 @@ class ProductListCreateView(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = ProductFilter
     search_fields = ["name", "factory", "description"]
-    ordering_fields = ["price", "rating", "number_of_sales"]
+    ordering_fields = ["price", "rating", "number_of_sales", "stock"]
 
     @action(detail=False, methods=['get'], url_path='top-selling')
     def get_top_selling(self, request):

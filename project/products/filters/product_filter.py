@@ -8,12 +8,11 @@ class ProductFilter(filters.FilterSet):
 
     class Meta:
         model = Product
-        fields = ['category', 'brand', 'color', 'size']
+        fields = ['category', 'brand', 'color', 'size', 'stock']
 
     def best_seller(self, queryset, name, value):
         if value:
-            queryset = queryset.annotate(total_salse = Sum('orderitem__quantity')).order_by('-total_sales')
-
+            queryset = queryset.annotate(total_sales=Sum('orderitem__quantity')).order_by('-total_sales')
             queryset = queryset.filter(total_sales__gte=1)
 
         return queryset

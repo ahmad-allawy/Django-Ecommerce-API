@@ -8,3 +8,4 @@ __pycache__
 *.DS_Store
 *.egg-info
 .env
+GIT_WORKFLOW.md
