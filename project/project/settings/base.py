@@ -7,7 +7,7 @@ from decouple import config, Csv
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-key")
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='unsafe-default-key')
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
@@ -134,7 +134,8 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
 
 # Paymob Config
-PAYMOB_API_KEY = config("PAYMOB_API_KEY")
-PAYMOB_IFRAME_ID = config("PAYMOB_IFRAME_ID")
-PAYMOB_INTEGRATION_ID = config("PAYMOB_INTEGRATION_ID")
-PAYMOB_HMAC_SECRET = config("PAYMOB_HMAC_SECRET")
+PAYMOB_API_KEY = config("PAYMOB_API_KEY", default='')
+PAYMOB_IFRAME_ID = config("PAYMOB_IFRAME_ID", default='')
+PAYMOB_INTEGRATION_ID = config("PAYMOB_INTEGRATION_ID", default='')
+PAYMOB_HMAC_SECRET = config("PAYMOB_HMAC_SECRET", default='')
+PAYMOB_CALLBACK_SECRET = config("PAYMOB_CALLBACK_SECRET", default='')
