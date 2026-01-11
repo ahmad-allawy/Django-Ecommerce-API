@@ -125,8 +125,28 @@ cp project/.env .env
 docker-compose -f docker-compose.dev.yml up --build
 ```
 
+**Alternative: Pull a prebuilt image from Docker Hub**
+
+If you prefer not to build the image locally you can pull a prebuilt image (the repository contains an example `Docker-compose-pull.yml` that uses the image `allawy/my-django-app:dev`). This is convenient for quick runs or CI environments.
+
+- Use the included compose file:
+
+```bash
+docker-compose -f Docker-compose-pull.yml up -d
+```
+
+- Or pull and run the image directly:
+
+```bash
+docker pull allawy/my-django-app:dev
+# run with your env file
+docker run --env-file project/.env -p 8000:8000 --name django-app allawy/my-django-app:dev
+```
+
+> Note: Ensure `project/.env` is present (or provide required env vars) before running the container; the compose file already uses `env_file: ./project/.env` to load the environment.
+
 What this does:
-- Builds and starts the Django service
+- Builds and starts the Django service (or pulls & runs the prebuilt image)
 - (Optionally) Starts any DB / services declared in the compose file
 - Runs migrations on container startup (if configured)
 
