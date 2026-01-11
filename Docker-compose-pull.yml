@@ -2,9 +2,7 @@ version: "3.9"
 
 services:
   django-app:
-    build:
-      context: .
-      target: development
+    image: allawy/my-django-app:dev
     container_name: django-app-dev
     ports:
       - "8000:8000"
@@ -13,14 +11,10 @@ services:
     environment:
       DJANGO_SETTINGS_MODULE: project.settings.dev
     volumes:
-      - ./project:/app/project
-      - ./project/requirements.txt:/app/requirements.txt
       - static_volume:/app/project/staticfiles
     depends_on:
       - db
-    expose:
-      - "8000"
-  
+    command: ["/app/project/entrypoint.sh"]
     restart: unless-stopped
 
   db:
