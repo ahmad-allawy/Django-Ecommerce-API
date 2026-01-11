@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy project
 COPY . .
+RUN chmod +x project/entrypoint.sh
 
 
 FROM base AS development
