@@ -9,6 +9,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # settings: [project.settings.dev, project.settings.prod]
+         settings: [project.settings.dev]
+    env:
+      DJANGO_SETTINGS_MODULE: ${{ matrix.settings }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,4 +31,7 @@ jobs:
 
       - name: Run tests
         run: |
+          cd project
+          python manage.py makemigrations
+          python manage.py migrate
           pytest
