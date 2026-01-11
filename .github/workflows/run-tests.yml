@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         # settings: [project.settings.dev, project.settings.prod]
-         settings: [project.settings.dev]
+         settings: [project.settings.test]
     env:
       DJANGO_SETTINGS_MODULE: ${{ matrix.settings }}
     steps:
