@@ -1,31 +1,22 @@
 services:
   django-app:
-    build:
-      context: .
-      target: production
-    container_name: django-app
-    ports:
-      - "8000:8000"
+    image: allawy/django-app
     env_file:
       - ./project/.env
-    depends_on:
-      - db
     restart: unless-stopped
-    environment:
-      - DJANGO_SETTINGS_MODULE=project.settings.prod
-
-  db:
-    image: postgres:15-alpine
-    container_name: postgres-db
-    environment:
-      - POSTGRES_DB=django_db
-      - POSTGRES_USER=django_user
-      - POSTGRES_PASSWORD=django_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - static_volume:/app/project/staticfiles
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx-dev
     ports:
-      - "5432:5432"
-    restart: unless-stopped
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/app/project/staticfiles:ro
+    depends_on:
+      - django-app
 
 volumes:
-  postgres_data:
+  static_volume:
