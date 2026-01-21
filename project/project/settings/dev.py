@@ -1,8 +1,13 @@
 from .base import *
 
 DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-ALLOWED_HOSTS += ['.ngrok-free.dev']
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".ngrok-free.dev"]
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
 
 # $env:DJANGO_SETTINGS_MODULE="project.settings.dev"

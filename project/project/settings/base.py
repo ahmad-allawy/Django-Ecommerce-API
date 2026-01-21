@@ -1,16 +1,10 @@
 from pathlib import Path
-import os
 from datetime import timedelta
 from decouple import config, Csv
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-dev-key")
 SECRET_KEY = config('SECRET_KEY', default='unsafe-default-key')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv() , default='*')
-
 
 AUTH_USER_MODEL = "accounts.User"
 
@@ -22,12 +16,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 3rd party
     'rest_framework',
-    "rest_framework_simplejwt.token_blacklist",
-    "drf_yasg",
+    'rest_framework_simplejwt.token_blacklist',
+    'drf_yasg',
 
-    # Local apps
     'accounts',
     'products',
     'orders',
@@ -62,40 +54,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
-# Database (override per environment)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
-#         'NAME': BASE_DIR / config('DB_NAME', default='db.sqlite3'),
-#     }
-# }
-
-DB_ENGINE = os.environ.get('DB_ENGINE', 'django.db.backends.sqlite3')
-
-if DB_ENGINE == 'django.db.backends.postgresql':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB', 'django_db'),
-            'USER': os.environ.get('POSTGRES_USER', 'django_user'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'django_password'),
-            'HOST': os.environ.get('POSTGRES_HOST', 'db'),
-            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, os.environ.get('DB_NAME', 'db.sqlite3')),
-        }
-    }
-    
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 LANGUAGE_CODE = 'en-us'
@@ -107,8 +70,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SWAGGER_USE_COMPAT_RENDERERS = False
-
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -124,16 +85,17 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-# Email Settings
-EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_BACKEND = config(
+    'EMAIL_BACKEND',
+    default='django.core.mail.backends.console.EmailBackend'
+)
 EMAIL_HOST = config('EMAIL_HOST', default='')
 EMAIL_PORT = config('EMAIL_PORT', cast=int, default=587)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool, default=True)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 
-
-# Paymob Config
+# Paymob
 PAYMOB_API_KEY = config("PAYMOB_API_KEY", default='')
 PAYMOB_IFRAME_ID = config("PAYMOB_IFRAME_ID", default='')
 PAYMOB_INTEGRATION_ID = config("PAYMOB_INTEGRATION_ID", default='')
